@@ -12,9 +12,16 @@
 .Content-Area-Top{
   position:fixed;
   top:65px;
+  width:78.5vw;
+  z-index: 10;
 }
 
 .Content-Area-Side{
   position:fixed;
   left:21vw;
+}
+
+.navigation{
+  position: relative;
+  z-index: 50;
 }

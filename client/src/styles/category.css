@@ -1,0 +1,36 @@
+.Category-Container{
+    margin:auto;
+}
+
+.Category-Header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: x-large;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.Category-Body{
+    height:84vh;
+    padding: 4px;
+    overflow-y: auto;
+
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: repeat(2,1fr);
+    gap:10px;
+    
+}
+
+.Category-Card{
+    padding: 10px;
+    z-index: 0;
+    height: 40vh;
+    width: 38vw;
+}
+
+.card-body{
+    padding:8px !important;
+}
+

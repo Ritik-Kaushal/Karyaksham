@@ -1,10 +1,11 @@
 import store from "@/store/baseStore";
 import { addCategory } from "@/store/categoryStore";
-import { HOME_PAGE } from "@/utils/constant";
+import { DASHBOARD_PAGE, HOME_PAGE } from "@/utils/constant";
 import Link from "next/link";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BsPlusCircle } from "react-icons/bs";
+import ModalPortal from "./ModalPortal";
 
 
 // Props include highlight
@@ -18,7 +19,8 @@ export default function Sidebar(props) {
                 <ul className="SideNav-container side-navbar-items-offscreen">
 
                     <SideNavHeading heading="CORE" />
-                    <SideNavLi title="Go Home" link={HOME_PAGE} svg={HomeSvg} highlight={props.highlight} />
+                    <SideNavLi title="Go Home" link={HOME_PAGE} svg={HomeSvg} highlight={props.highlight} target={"home"} />
+                    <SideNavLi title="Go Dashboard" link={DASHBOARD_PAGE} svg={DashboardSvg} highlight={props.highlight} target={"dashboard"} />
                     <NavDivider />
 
                     <div className="flex justify-between align-middle">
@@ -32,12 +34,10 @@ export default function Sidebar(props) {
 
                     {categories.length !== 0 ? <>
                         {categories.map((category, index) => (
-                            <SideNavLi title={category} link={HOME_PAGE} svg={CategorySvg} highlight={props.highlight} />
+                            <SideNavLi title={category} link={`/category/${category}`} svg={CategorySvg} highlight={props.highlight} target={category} /> // target is just dummy here
                         ))}
                     </> : <><SideNavLi title="No categories available" link={"#"} svg={NoCategorySvg} highlight={props.highlight} /></>}
                     <NavDivider />
-
-
                 </ul>
             </div>
         </>
@@ -67,11 +67,10 @@ function SideNavLi(props) {
                 <span id="nav-items">
                     <span>
                         <props.svg highlight={props.highlight} />
-
                     </span>
                     <span
                         className={
-                            props.highlight === 1
+                            props.highlight === props.target
                                 ? "active"
                                 : "none"
                         }
@@ -98,11 +97,12 @@ function CreateCategoryModal(props) {
 
     function handleCreateCategory() {
         store.dispatch(addCategory(props.category_name));
-        // document.getElementById('create-category').checked = false;
+        document.getElementById('create-category').checked = false;
+        props.setCategoryName("");
     }
 
     return (
-        <>
+        <ModalPortal>
             <input type="checkbox" id="create-category" className="modal-toggle" />
             <label htmlFor="create-category" className="modal cursor-pointer">
                 <label className="modal-box relative" htmlFor="">
@@ -115,7 +115,7 @@ function CreateCategoryModal(props) {
                     {props.category_name ? <button className="Create-Category-Button btn btn-outline btn-info float-right" onClick={handleCreateCategory}>Create</button> : <button className="btn btn-outline btn-info float-right cursor-not-allowed">Create</button>}
                 </label>
             </label>
-        </>
+        </ModalPortal>
     )
 }
 
@@ -146,6 +146,30 @@ function CategorySvg(props) {
             <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z" />
             <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z" />
             <path fill-rule="evenodd" d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z" />
+        </svg>
+    )
+}
+
+// SVG of Dashboard
+function DashboardSvg(props) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill={
+                props.highlight === 2
+                    ? "white"
+                    : "gray"
+            }
+            className="bi bi-speedometer"
+            viewBox="0 0 16 16"
+        >
+            <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z" />
+            <path
+                fillRule="evenodd"
+                d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"
+            />
         </svg>
     )
 }

@@ -7,7 +7,9 @@ export default function Home() {
       <Head>
         <title>Karyaksham</title>
       </Head>
-      <NavBar />
+        <NavBar />
+      {/* <div className="navigation">
+      </div> */}
     </>
   );
 }
