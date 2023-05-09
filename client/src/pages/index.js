@@ -8,8 +8,6 @@ export default function Home() {
         <title>Karyaksham</title>
       </Head>
         <NavBar />
-      {/* <div className="navigation">
-      </div> */}
     </>
   );
 }
