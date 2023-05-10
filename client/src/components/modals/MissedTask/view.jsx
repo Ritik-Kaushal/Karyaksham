@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react'
-import ModalPortal from '../ModalPortal';
 import moment from 'moment';
 import store from "@/store/baseStore";
 import { markDone,deleteTask } from "@/store/taskStore";
+import ModalPortal from '@/components/ModalPortal';
 
 // Modal to display details of tasks
-export default function ViewUpcommingTaskModal(props) {
+export default function ViewMissedTaskModal(props) {
 
     function markTaskDone(){
-        store.dispatch(markDone({title:props.title, category:props.category, from:"upcoming"}));
-        document.getElementById('upcomming-task-details').checked = false;
+        store.dispatch(markDone({title:props.title, category:props.category, from:"missed"}));
+        document.getElementById('missed-task-details').checked = false;
 
     }
 
@@ -18,19 +18,19 @@ export default function ViewUpcommingTaskModal(props) {
         props.setDescription(props.description);
         props.setTimestamp(props.timestamp);
 
-        document.getElementById('upcomming-task-details').checked = false;
-        document.getElementById('edit-upcomming-task-details').checked = true;
+        document.getElementById('missed-task-details').checked = false;
+        document.getElementById('edit-missed-task-details').checked = true;
     }
 
     function deleteThisTask(){
-        store.dispatch(deleteTask({title:props.title, category:props.category, from:"upcoming"}));
-        document.getElementById('upcomming-task-details').checked = false;
+        store.dispatch(deleteTask({title:props.title, category:props.category, from:"missed"}));
+        document.getElementById('missed-task-details').checked = false;
     }
 
     return (
         <ModalPortal>
-            <input type="checkbox" id="upcomming-task-details" className="modal-toggle" />
-            <label htmlFor="upcomming-task-details" className="modal cursor-pointer">
+            <input type="checkbox" id="missed-task-details" className="modal-toggle" />
+            <label htmlFor="missed-task-details" className="modal cursor-pointer">
                 <label className="modal-box relative" htmlFor="">
                     <h3 className="text-lg font-bold text-center">{props.title}</h3>
                     <br></br>

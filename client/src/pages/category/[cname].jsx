@@ -1,9 +1,10 @@
 import NavBar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import CompletedTaskCard from "@/components/CompletedTaskCard";
-import DelayedTaskCard from "@/components/DelayedTaskCard";
-import MissedTaskCard from "@/components/MissedTaskCard";
-import UpcomingTaskCard from "@/components/UpcomingTaskCard";
+import CompletedTaskCard from "@/components/TaskCards/CompletedTaskCard";
+import DelayedTaskCard from "@/components/TaskCards/DelayedTaskCard";
+import MissedTaskCard from "@/components/TaskCards/MissedTaskCard";
+import UpcomingTaskCard from "@/components/TaskCards/UpcomingTaskCard";
+
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";

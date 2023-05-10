@@ -150,6 +150,9 @@ const task = createSlice({
   name: "task",
   initialState,
   reducers: {
+    initializeTask(state,actions){
+      state[actions.payload] = {upcoming:[],completed:[],missed:[],delayed:[]};
+    },
     addTask(state, actions) {
       const category = actions.payload.category;
       state[category]["upcoming"] = [
@@ -161,17 +164,20 @@ const task = createSlice({
     markUndone(state, actions) {
       const category = actions.payload.category;
       const toMarkUndone = actions.payload.title;
+      const from = actions.payload.from;
 
       let indexToRemove = state[category].completed.findIndex(
         (task) => task.title === toMarkUndone
       );
       let removedTask =
         indexToRemove !== -1
-          ? state[category].completed.splice(indexToRemove, 1)[0]
+          ? state[category][from].splice(indexToRemove, 1)[0]
           : null;
 
-      // check if it will go to upcoming or missed
-      state[category].upcoming = [...state[category].upcoming, removedTask];
+          var to="upcoming";
+          if(from==="delayed") to="missed";
+    
+          state[category][to] = [...state[category][to], removedTask];
     },
 
     markDone(state, actions) {
@@ -187,8 +193,10 @@ const task = createSlice({
           ? state[category][from].splice(indexToRemove, 1)[0]
           : null;
 
-      // check if it will go to upcoming or missed
-      state[category].completed = [...state[category].completed, removedTask];
+      var to="completed";
+      if(from==="missed") to="delayed";
+
+      state[category][to] = [...state[category][to], removedTask];
     },
 
     updateTask(state, actions) {
@@ -200,14 +208,13 @@ const task = createSlice({
 
       // OldTitle not found
       if (indexToUpdate === -1) {
-        // check if it will go to upcoming or missed
-       alert(oldTitle);
-        state[category].upcoming = [...state[category].upcoming, task];
-      } else {
-        // check if it will go to upcoming or missed
-        state[category].upcoming[indexToUpdate].title = task.title;
-        state[category].upcoming[indexToUpdate].description = task.description;
-        state[category].upcoming[indexToUpdate].timestamp = task.timestamp;
+        console.log("Old title not found");
+        state[category][from] = [...state[category].upcoming, task];
+      } 
+      else {
+        state[category][from][indexToUpdate].title = task.title;
+        state[category][from][indexToUpdate].description = task.description;
+        state[category][from][indexToUpdate].timestamp = task.timestamp;
       }
     },
 
@@ -216,7 +223,6 @@ const task = createSlice({
       const toDelete = actions.payload.title;
       const from = actions.payload.from;
 
-      // check if it will go to upcoming or missed
       state[category][from] = state[category][from].filter(
         (task) => task.title !== toDelete
       );
@@ -224,5 +230,5 @@ const task = createSlice({
   },
 });
 
-export const { addTask, markUndone, markDone, deleteTask, updateTask } = task.actions;
+export const { initializeTask, addTask, markUndone, markDone, deleteTask, updateTask } = task.actions;
 export default task.reducer;

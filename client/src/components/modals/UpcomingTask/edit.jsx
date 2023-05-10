@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
-import ModalPortal from '../ModalPortal';
+import ModalPortal from '@/components/ModalPortal';
+
 import moment from 'moment';
 import store from "@/store/baseStore";
 import { updateTask } from "@/store/taskStore";

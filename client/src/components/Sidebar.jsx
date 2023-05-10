@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BsPlusCircle } from "react-icons/bs";
 import ModalPortal from "./ModalPortal";
-
+import { initializeTask } from "@/store/taskStore";
 
 // Props include highlight
 export default function Sidebar(props) {
@@ -97,6 +97,7 @@ function CreateCategoryModal(props) {
 
     function handleCreateCategory() {
         store.dispatch(addCategory(props.category_name));
+        store.dispatch(initializeTask(props.category_name));
         document.getElementById('create-category').checked = false;
         props.setCategoryName("");
     }

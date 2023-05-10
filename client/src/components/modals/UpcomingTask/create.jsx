@@ -2,7 +2,7 @@ import store from '@/store/baseStore';
 import { addTask } from '@/store/taskStore';
 import React from 'react'
 import moment from 'moment';
-import ModalPortal from '../ModalPortal';
+import ModalPortal from '@/components/ModalPortal';
 
 
 // Modal to create task
@@ -16,8 +16,8 @@ export default function CreateTaskModal(props) {
         return inputDate.isValid() && inputDate.isAfter(currentDate);
     }
 
-    function handleCreateTask(){
-        store.dispatch(addTask({category:props.category,task:{title:props.title,description:props.description, timestamp:props.timestamp}}));
+    function handleCreateTask() {
+        store.dispatch(addTask({ category: props.category, task: { title: props.title, description: props.description, timestamp: props.timestamp } }));
         props.setTitle("");
         props.setDescription("");
         props.setTimestamp("");
