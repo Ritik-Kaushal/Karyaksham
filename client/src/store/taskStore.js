@@ -146,6 +146,7 @@ const initialState = {
   },
 };
 
+// const initialState = {}
 const task = createSlice({
   name: "task",
   initialState,
@@ -166,7 +167,7 @@ const task = createSlice({
       const toMarkUndone = actions.payload.title;
       const from = actions.payload.from;
 
-      let indexToRemove = state[category].completed.findIndex(
+      let indexToRemove = state[category][from].findIndex(
         (task) => task.title === toMarkUndone
       );
       let removedTask =

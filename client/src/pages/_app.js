@@ -4,7 +4,7 @@ import "@/styles/navbar.css";
 import "@/styles/sidebar.css";
 import "@/styles/category.css";
 import "@/styles/taskcard.css"
-import "react-datetime/css/react-datetime.css";
+import "@/styles/chart.css"
 
 import { Provider } from "react-redux";
 

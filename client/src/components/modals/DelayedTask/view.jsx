@@ -34,7 +34,7 @@ export default function ViewDelayedTaskModal(props) {
 
                     <div className="flex justify-center">
                         <button className="btn btn-outline btn-success mr-2" onClick={() => { markTaskNotDone() }}>Mark As Not Done</button>
-                        <button className="btn btn-outline btn-error mr-2" onClick={() => { deleteThisTask() }}>Delete</button>
+                        <button className="btn btn-outline btn-error mr-2" onClick={() => {  deleteThisTask() }}>Delete</button>
                     </div>
                 </label>
             </label>

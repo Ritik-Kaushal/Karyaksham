@@ -1,6 +1,13 @@
 import NavBar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+// import BarChart from "@/components/barChart";
+import dynamic from "next/dynamic";
 import Head from "next/head";
+import { useEffect } from "react";
+
+const BarChart = dynamic(() => import("@/components/barChart"), {
+    ssr: false,
+})
 
 export default function Dashboard() {
 
@@ -8,9 +15,14 @@ export default function Dashboard() {
         <>
             <Head><title>Dashboard</title></Head>
             <NavBar />
-            <Sidebar highlight={"dashboard"}/>
+            <Sidebar highlight={"dashboard"} />
             <div className="Content-Area-Top Content-Area-Side">
-                From Dashboard
+                <div className='bar-chart'>
+                    <BarChart/>
+                </div>
+                <div>
+                    
+                </div>
             </div>
         </>
     )
