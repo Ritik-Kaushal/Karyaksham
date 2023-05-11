@@ -1,13 +1,27 @@
-import { HOME_PAGE } from "@/utils/constant";
+import store from "@/store/baseStore";
+import { logout } from "@/store/userStore";
+import { DASHBOARD_PAGE, HOME_PAGE } from "@/utils/constant";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import LoginModal from "./modals/Auth/LoginModal";
+import RegisterModal from "./modals/Auth/RegisterModal";
 
 export default function NavBar() {
-    const [loggedIn, setLoggedIn] = useState(false);
+    const { logged_in, profile_pic } = useSelector(state => state.user);
+
+    function displayLoginModal(){
+        document.getElementById('login-modal').checked = true;
+    }
+
+    function displayRegisterModal(){
+        document.getElementById('register-modal').checked = true;
+    }
 
     return (
         <>
+            <LoginModal />
+            <RegisterModal />
             <div className="Navbar-Container">
                 <div className="Navbar-Logo">
                     <Link href={HOME_PAGE}>
@@ -26,19 +40,16 @@ export default function NavBar() {
                         <Link href="/faq">FAQs</Link>
                     </li>
 
-                    {loggedIn && (
-                        <UserMenu profile_pic="https://ik.imagekit.io/pqymxdgbi/avtar.png" />
-                    )}
-                    {!loggedIn && (
-                        <>
-                            <li>
-                                <Link href="/login">Login</Link>
-                            </li>
-                            <li>
-                                <Link href="/signup">SignUp</Link>
-                            </li>
-                        </>
-                    )}
+                    {logged_in ? (
+                        <UserMenu profile_pic={profile_pic} />
+                    ) : <>
+                        <li>
+                            <Link href="#" onClick={displayLoginModal}>Login</Link>
+                        </li>
+                        <li>
+                            <Link href="#" onClick={displayRegisterModal}>Register</Link>
+                        </li>
+                    </>}
                 </ul>
             </div>
         </>
@@ -61,15 +72,22 @@ function UserMenu(props) {
                 className="menu menu-compact dropdown-content mt-2 p-2 shadow rounded-box w-52 bg-black"
             >
                 <li>
+                    <Link href={DASHBOARD_PAGE}>
+                        Dashboard
+                    </Link>
+
+                </li>
+                <li>
                     <Link
                         href={HOME_PAGE}
                         onClick={() => {
-                            // store.dispatch(logoutUser());
-                            alert("Logged out");
+                            store.dispatch(logout());
+                            localStorage.removeItem("token");
                         }}
                     >
                         Logout
                     </Link>
+
                 </li>
             </ul>
         </div>

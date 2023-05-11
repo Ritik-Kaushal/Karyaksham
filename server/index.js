@@ -7,10 +7,14 @@ dotenv.config();
 const mongoose = require("mongoose");
 const app = express();
 
-const welcome = require("./routes/welcome");
 const auth = require("./routes/auth");
+const category = require("./routes/category");
+const task = require("./routes/task");
 
 const User = require("./models/user");
+const Category = require("./models/category");
+const Task = require("./models/task");
+const { verifyToken } = require("./middlewares.js/verifyToken");
 
 
 // ------------- Middlewares --------------
@@ -19,8 +23,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 
-app.use("/",welcome);
 app.use("/auth",auth);
+app.use("/category",verifyToken, category);
+app.use("/task",verifyToken ,task);
 
 
 // ------------- database connection and starting the server --------------
