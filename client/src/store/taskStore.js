@@ -1,22 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
+import moment from 'moment';
+
 
 const initialState = {
   Personal: {
     upcoming: [
       {
         title: "Solve codeforces upcoming",
-        timestamp: "09/08/2023 14:25",
+        timestamp: "12/08/2023 14:25",
         description:
           "I have to solve lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
       },
       {
         title: "Solve leetcode",
-        timestamp: "09/08/2023 14:25",
+        timestamp: "12/08/2023 14:25",
         description: "I have to solve",
       },
       {
         title: "Solve codeforces",
-        timestamp: "09/08/2023 14:25",
+        timestamp: "13/08/2023 14:25",
         description: "I have to solve",
       },
     ],
@@ -76,18 +78,18 @@ const initialState = {
     upcoming: [
       {
         title: "Solve codeforces",
-        timestamp: "09/08/2023 14:25",
+        timestamp: "11/08/2023 14:25",
         description: "I have to solve",
       },
       {
         title: "Solve leetcode",
-        timestamp: "09/08/2023 14:25",
+        timestamp: "15/08/2023 14:25",
         description: "I have to solve",
         description: "I have to solve",
       },
       {
         title: "Solve codeforces",
-        timestamp: "09/08/2023 14:25",
+        timestamp: "18/08/2023 14:25",
         description: "I have to solve",
         description: "I have to solve",
       },
@@ -151,8 +153,13 @@ const task = createSlice({
   name: "task",
   initialState,
   reducers: {
-    initializeTask(state,actions){
-      state[actions.payload] = {upcoming:[],completed:[],missed:[],delayed:[]};
+    initializeTask(state, actions) {
+      state[actions.payload] = {
+        upcoming: [],
+        completed: [],
+        missed: [],
+        delayed: [],
+      };
     },
     addTask(state, actions) {
       const category = actions.payload.category;
@@ -175,10 +182,10 @@ const task = createSlice({
           ? state[category][from].splice(indexToRemove, 1)[0]
           : null;
 
-          var to="upcoming";
-          if(from==="delayed") to="missed";
-    
-          state[category][to] = [...state[category][to], removedTask];
+      var to = "upcoming";
+      if (from === "delayed") to = "missed";
+
+      state[category][to] = [...state[category][to], removedTask];
     },
 
     markDone(state, actions) {
@@ -194,29 +201,82 @@ const task = createSlice({
           ? state[category][from].splice(indexToRemove, 1)[0]
           : null;
 
-      var to="completed";
-      if(from==="missed") to="delayed";
+      var to = "completed";
+      if (from === "missed") to = "delayed";
 
       state[category][to] = [...state[category][to], removedTask];
     },
 
     updateTask(state, actions) {
-      console.log(actions.payload)
       const { category, from, task, oldTitle } = actions.payload;
       let indexToUpdate = state[category][from].findIndex(
         (obj) => obj.title === oldTitle
       );
 
-      // OldTitle not found
-      if (indexToUpdate === -1) {
-        console.log("Old title not found");
-        state[category][from] = [...state[category].upcoming, task];
-      } 
-      else {
-        state[category][from][indexToUpdate].title = task.title;
-        state[category][from][indexToUpdate].description = task.description;
-        state[category][from][indexToUpdate].timestamp = task.timestamp;
+      const currentDate = moment();
+      const format = "DD/MM/YYYY HH:mm";
+      const inputDate = moment(task.timestamp, format, true);
+
+      if (inputDate.isAfter(currentDate)) {
+        if (from === "missed") {
+          let removedTask =
+            indexToUpdate !== -1
+              ? state[category].missed.splice(indexToUpdate, 1)[0]
+              : null;
+
+          state[category].upcoming = [...state[category].upcoming, removedTask];
+        } else {
+          if (indexToUpdate === -1) {
+            console.log("Old title not found");
+            state[category].upcoming = [...state[category].upcoming, task];
+          } else {
+            state[category].upcoming[indexToUpdate].title = task.title;
+            state[category].upcoming[indexToUpdate].description = task.description;
+            state[category].upcoming[indexToUpdate].timestamp = task.timestamp;
+          }
+        }
+      } else {
+        if (from === "upcoming") {
+          let removedTask =
+            indexToUpdate !== -1
+              ? state[category].upcoming.splice(indexToUpdate, 1)[0]
+              : null;
+
+          state[category].missed = [...state[category].missed, removedTask];
+        } else {
+          if (indexToUpdate === -1) {
+            console.log("Old title not found");
+            state[category].missed = [...state[category].missed, task];
+          } else {
+            state[category].missed[indexToUpdate].title = task.title;
+            state[category].missed[indexToUpdate].description = task.description;
+            state[category].missed[indexToUpdate].timestamp = task.timestamp;
+          }
+        }
       }
+      // OldTitle not found
+
+      // if (indexToUpdate === -1) {
+      //   console.log("Old title not found");
+      //   state[category][from] = [...state[category][to], task];
+      // } else {
+      //   state[category][from][indexToUpdate].title = task.title;
+      //   state[category][from][indexToUpdate].description = task.description;
+      //   state[category][from][indexToUpdate].timestamp = task.timestamp;
+      // }
+    },
+    moveToMissed(state, actions) {
+      const { title, category } = actions.payload;
+
+      let indexToMove = state[category].upcoming.findIndex(
+        (task) => task.title === title
+      );
+      let MovedTask =
+        indexToMove !== -1
+          ? state[category].upcoming.splice(indexToMove, 1)[0]
+          : null;
+
+      state[category].missed = [...state[category].missed, MovedTask];
     },
 
     deleteTask(state, actions) {
@@ -231,5 +291,13 @@ const task = createSlice({
   },
 });
 
-export const { initializeTask, addTask, markUndone, markDone, deleteTask, updateTask } = task.actions;
+export const {
+  initializeTask,
+  addTask,
+  markUndone,
+  markDone,
+  deleteTask,
+  updateTask,
+  moveToMissed,
+} = task.actions;
 export default task.reducer;

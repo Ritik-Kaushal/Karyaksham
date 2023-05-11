@@ -32,7 +32,7 @@ export default function BarChart() {
         interaction: {
             intersect: false,
         },
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
     };
 
 

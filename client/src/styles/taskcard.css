@@ -22,3 +22,10 @@ color: #555555;
 .tooltip{
     text-align: left !important;
 }
+
+
+.dashboard-card{
+    padding: 8px;
+    /* height: 40vh; */
+    /* overflow-y: scroll; */
+}
